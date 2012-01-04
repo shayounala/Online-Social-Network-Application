@@ -8,7 +8,14 @@ public class Network_Analysis {
 	 */
 	public double calculateAVE_D(Network network) {
 		// TODO Auto-generated method stub
-		double averagedegree = 0;
+		double averagedegree = 0, totaldegree = 0;
+		
+		int NodeNum = network.getHumans().size();
+		for(int i=0;i<NodeNum;i++){
+			Human human = network.getHumans().get(i);
+			totaldegree += human.getFollowerkeys().size()+human.getFriendkeys().size();
+		}
+		averagedegree = totaldegree/NodeNum;
 		
 		System.out.println("The average degree of network is: "+averagedegree);
 		return averagedegree;

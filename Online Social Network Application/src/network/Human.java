@@ -7,6 +7,24 @@ public class Human {
 	private int mainkey;
 	private ArrayList<Integer> tweets;
 	private ArrayList<Integer> reposts;
+	private ArrayList<Integer> followerkeys;
+	public ArrayList<Integer> getFollowerkeys() {
+		return followerkeys;
+	}
+
+	public void setFollowerkeys(ArrayList<Integer> followerkeys) {
+		this.followerkeys = followerkeys;
+	}
+
+	public ArrayList<Integer> getFriendkeys() {
+		return friendkeys;
+	}
+
+	public void setFriendkeys(ArrayList<Integer> friendkeys) {
+		this.friendkeys = friendkeys;
+	}
+
+	private ArrayList<Integer> friendkeys;
 	private int Maxtweetnumber;
 
 	public ArrayList<Integer> getReposts() {
@@ -28,6 +46,8 @@ public class Human {
 	public Human(int mainkey) {
 		// TODO Auto-generated constructor stub
 		this.mainkey = mainkey;
+		followerkeys = new ArrayList<Integer>();
+		friendkeys = new ArrayList<Integer>();
 	}
 
 	public void post(int posttime) {
@@ -60,11 +80,10 @@ public class Human {
 	private ArrayList<Integer> accesstweets(Network network, int maxtweetnumber) {
 		// TODO Auto-generated method stub
 		ArrayList<Integer> tweetmainkeys = new ArrayList<Integer>();
-		ArrayList<Integer> neighbors = network.getneighbors(this.mainkey);
 		
 		//access tweets from every neighbor with maximum number
-		for(int neighbororder=0;neighbororder<neighbors.size();neighbororder++){
-			Human human = network.getHumans().get(neighbororder);
+		for(int neighbororder=0;neighbororder<friendkeys.size();neighbororder++){
+			Human human = network.getHumans().get(friendkeys.get(neighbororder));
 			int tweetsize = human.tweets.size();
 			
 			if(tweetsize<maxtweetnumber){
