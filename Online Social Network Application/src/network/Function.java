@@ -1,6 +1,7 @@
 package network;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Function {
 
@@ -63,6 +64,21 @@ public class Function {
 		toptweetmainkeys.remove(toptweetmainkeys.size()-1);
 		
 		System.out.println(toptweetmainkeys);
+	}
+
+	public static double getNormalDouble(double mean, double variance) {
+		// TODO Auto-generated method stub
+		double randomdouble = 0;
+		Random random = new Random();
+		randomdouble = random.nextGaussian()*variance+mean;
+		return randomdouble;
+	}
+
+	public static int getNormalPositiveInt(double mean, double variance) {
+		// TODO Auto-generated method stub
+		double randomdouble = getNormalDouble(mean, variance);
+		int randomint = (int)Math.abs(randomdouble);
+		return randomint;
 	}
 
 }

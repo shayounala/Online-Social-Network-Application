@@ -13,12 +13,12 @@ public class Network_Main {
 		
 		double averagedegree = analysis.calculateAVE_D(network);//Calculate the average degree of network
 		double clustereff = analysis.calculateCE(network);//Calculate the clustering efficiency of network
-		double averagedistance = analysis.calculateAVE_Dis(network);//Calculate the average distance of network
+		//double averagedistance = analysis.calculateAVE_Dis(network);//Calculate the average distance of network
 		
 		System.out.println("Network analysis");
 		System.out.println("Average degree: "+averagedegree);
 		System.out.println("Clustering efficiency: "+clustereff);
-		System.out.println("Average distance: "+averagedistance);
+		//System.out.println("Average distance: "+averagedistance);
 		System.out.println();
 		
 		Diffusion diffusion = new Diffusion(network);

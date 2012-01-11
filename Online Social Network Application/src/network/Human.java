@@ -26,6 +26,24 @@ public class Human {
 
 	private ArrayList<Integer> friendkeys;
 	private int Maxtweetnumber;
+	private double thres_post;
+	private double thres_repost;
+
+	public double getThres_repost() {
+		return thres_repost;
+	}
+
+	public void setThres_repost(double thres_repost) {
+		this.thres_repost = thres_repost;
+	}
+
+	public double getThres_post() {
+		return thres_post;
+	}
+
+	public void setThres_post(double thres_post) {
+		this.thres_post = thres_post;
+	}
 
 	public ArrayList<Integer> getReposts() {
 		return reposts;
@@ -43,11 +61,16 @@ public class Human {
 		this.mainkey = mainkey;
 	}
 
-	public Human(int mainkey) {
+	public Human(int mainkey, int maxtweetnumber, double thres_post, double thres_repost) {
 		// TODO Auto-generated constructor stub
 		this.mainkey = mainkey;
 		followerkeys = new ArrayList<Integer>();
 		friendkeys = new ArrayList<Integer>();
+		tweets = new ArrayList<Integer>();
+		reposts = new ArrayList<Integer>();
+		this.Maxtweetnumber = maxtweetnumber;
+		this.thres_post = thres_post;
+		this.thres_repost = thres_repost;
 	}
 
 	public void post(int posttime) {
@@ -60,7 +83,12 @@ public class Human {
 
 	private boolean istopost() {
 		// TODO Auto-generated method stub
-		return false;
+		double random = Function.getNormalDouble(Diffusion.mean_post, Diffusion.variance_post);
+		if(random>thres_post){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public void repost(Network network, int reposttime) {
@@ -102,7 +130,12 @@ public class Human {
 
 	private boolean istorepost() {
 		// TODO Auto-generated method stub
-		return false;
+		double random = Function.getNormalDouble(Diffusion.mean_repost, Diffusion.variance_repost);
+		if(random>thres_repost){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }

@@ -3,6 +3,12 @@ package network;
 public class Diffusion {
 
 	private static final int diffusiontime = 0;
+	public static double variance_post;
+	public static double mean_post;
+	public static double mean_repost;
+	public static double variance_repost;
+	public static double mean_tweetnumber;
+	public static double variance_tweetnumber;
 	private Network network;
 
 	public Diffusion(Network network) {
@@ -29,6 +35,30 @@ public class Diffusion {
 			
 			
 		}
+		
+		outputdiffusionresults();
+		savediffusionresults();
+	}
+
+	private void outputdiffusionresults() {
+		// TODO Auto-generated method stub
+		//output the average tweets and reposts per user.
+		double averagetweets = 0, averagereposts = 0;
+		for(int humanorder=0;humanorder<network.getNodeNum();humanorder++){
+			averagetweets += network.getHumans().get(humanorder).getTweets().size();
+			averagereposts += network.getHumans().get(humanorder).getReposts().size();
+		}
+		averagetweets /= network.getNodeNum();
+		averagereposts /= network.getNodeNum();
+		System.out.println("Average Tweets per User is "+averagetweets);
+		System.out.println("Average Reposts per User is "+averagereposts);
+		
+		//output 
+	}
+
+	private void savediffusionresults() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

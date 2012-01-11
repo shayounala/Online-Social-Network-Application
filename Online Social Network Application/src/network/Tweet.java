@@ -44,6 +44,7 @@ public class Tweet {
 	}
 
 	private int inreplytouserid;
+	private ArrayList<Integer> reposts;
 
 	public int getUserid() {
 		return userid;
@@ -54,6 +55,7 @@ public class Tweet {
 		this.userid = mainkey;
 		this.createdtime = posttime;
 		this.mainkey = Number;
+		reposts =  new ArrayList<Integer>();
 		Number++;
 	}
 
@@ -67,6 +69,7 @@ public class Tweet {
 		
 		this.inreplytouserid = tweets.get(mainkey2).userid;
 		this.inreplytomainkey = mainkey2;
+		tweets.get(mainkey2).reposts.add(mainkey);
 	}
 
 }

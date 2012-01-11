@@ -18,21 +18,28 @@ public class Network {
 	private ArrayList<Human> humans;
 	private int NodeNum;
 	
+	public int getNodeNum() {
+		return NodeNum;
+	}
+
 	public ArrayList<Human> getHumans() {
 		return humans;
 	}
 
 	public Network(int NodeNum, int LeastNum) {
 		// TODO Auto-generated constructor stub
-		this.NodeNum = NodeNum;
 		InitiationHumans(NodeNum);
 	}
 
 	private void InitiationHumans(int nodeNum) {
 		// TODO Auto-generated method stub
+		this.NodeNum = nodeNum;
 		humans = new ArrayList<Human>();
 		for(int i=0;i<nodeNum;i++){
-			humans.add(new Human(i));
+			int maxtweetnumber = Function.getNormalPositiveInt(Diffusion.mean_tweetnumber, Diffusion.variance_tweetnumber);
+			double thres_post = Diffusion.mean_post+Function.getNormalDouble(Diffusion.mean_post, Diffusion.variance_post);
+			double thres_repost = Diffusion.mean_repost+Function.getNormalDouble(Diffusion.mean_repost, Diffusion.variance_repost);
+			humans.add(new Human(i, maxtweetnumber, thres_post, thres_repost));
 		}
 	}
 
