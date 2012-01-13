@@ -2,7 +2,7 @@ package network;
 
 public class Diffusion {
 
-	private static final int diffusiontime = 0;
+	private static int diffusiontime = 0;
 	public static double variance_post;
 	public static double mean_post;
 	public static double mean_repost;
@@ -11,9 +11,11 @@ public class Diffusion {
 	public static double variance_tweetnumber;
 	private Network network;
 
-	public Diffusion(Network network) {
+	public Diffusion(Network network, int diffusiontime) {
 		// TODO Auto-generated constructor stub
 		this.network = network;
+		this.diffusiontime = diffusiontime;
+		
 	}
 
 	public void diffusionprocess() {

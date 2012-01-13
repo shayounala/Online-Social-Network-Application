@@ -64,7 +64,7 @@ public class Network {
 				}
 			}
 			
-			System.exit(0);
+			//System.exit(0);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,7 +112,7 @@ public class Network {
 			}
 
 			follower.clear();
-			System.out.println(i);
+			//System.out.println(i);
 		}
 
 		for(int i=0;i<orderedfollowers.size();i++){

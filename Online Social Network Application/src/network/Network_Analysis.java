@@ -37,8 +37,8 @@ public class Network_Analysis {
 			ArrayList<Integer> followerids = network.getHumans().get(i).getFollowerkeys();
 			totalfollowers += followerids.size();
 
-			System.out.println("User: " + i + " followerids: "
-					+ followerids.size());
+/*			System.out.println("User: " + i + " followerids: "
+					+ followerids.size());*/
 
 			for (int j = 0; j < followerids.size(); j++) {
 				for (int k = j; k < followerids.size(); k++) {

@@ -20,8 +20,9 @@ public class Network_Main {
 		System.out.println("Clustering efficiency: "+clustereff);
 		//System.out.println("Average distance: "+averagedistance);
 		System.out.println();
+		//System.exit(0);
 		
-		Diffusion diffusion = new Diffusion(network);
+		Diffusion diffusion = new Diffusion(network,10000);
 		diffusion.diffusionprocess();
 	}
 
