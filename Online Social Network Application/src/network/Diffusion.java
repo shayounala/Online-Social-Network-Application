@@ -1,66 +1,122 @@
 package network;
 
+import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class Diffusion {
 
-	private static int diffusiontime = 0;
-	public static double variance_post;
-	public static double mean_post;
-	public static double mean_repost;
-	public static double variance_repost;
-	public static double mean_tweetnumber;
-	public static double variance_tweetnumber;
+	public static int diffusiontime = 0;
 	private Network network;
 
-	public Diffusion(Network network, int diffusiontime) {
+	public Diffusion(Network network) {
 		// TODO Auto-generated constructor stub
 		this.network = network;
-		this.diffusiontime = diffusiontime;
-		
 	}
 
 	public void diffusionprocess() {
 		// TODO Auto-generated method stub
-		for(int unittime=0;unittime<diffusiontime;unittime++){
-			
-			//post a tweet
-			for(int humanorder=0;humanorder<network.getHumans().size();humanorder++){
+		for (int unittime = 0; unittime < diffusiontime; unittime++) {
+
+			System.out.println("Diffusion Time: " + unittime);
+
+			// post a tweet
+			System.out.println("Start posting: " + System.currentTimeMillis());
+			for (int humanorder = 0; humanorder < network.getHumans().size(); humanorder++) {
 				Human human = network.getHumans().get(humanorder);
 				human.post(unittime);
 			}
-			
-			
-			//repost a tweet
-			for(int humanorder=0;humanorder<network.getHumans().size();humanorder++){
+			System.out.println("Finish posting: " + System.currentTimeMillis());
+
+			// repost a tweet
+			System.out
+					.println("Start reposting: " + System.currentTimeMillis());
+			for (int humanorder = 0; humanorder < network.getHumans().size(); humanorder++) {
 				Human human = network.getHumans().get(humanorder);
 				human.repost(network, unittime);
 			}
-			
-			
+			System.out.println("Finish reposting: "
+					+ System.currentTimeMillis());
+
 		}
-		
+
 		outputdiffusionresults();
-		savediffusionresults();
 	}
 
 	private void outputdiffusionresults() {
 		// TODO Auto-generated method stub
-		//output the average tweets and reposts per user.
+		// calculate the average tweets and reposts per user.
 		double averagetweets = 0, averagereposts = 0;
-		for(int humanorder=0;humanorder<network.getNodeNum();humanorder++){
-			averagetweets += network.getHumans().get(humanorder).getTweets().size();
-			averagereposts += network.getHumans().get(humanorder).getReposts().size();
+		for (int humanorder = 0; humanorder < network.getNodeNum(); humanorder++) {
+			averagetweets += network.getHumans().get(humanorder).getTweets()
+					.size();
+			averagereposts += network.getHumans().get(humanorder).getReposts()
+					.size();
 		}
 		averagetweets /= network.getNodeNum();
 		averagereposts /= network.getNodeNum();
-		System.out.println("Average Tweets per User is "+averagetweets);
-		System.out.println("Average Reposts per User is "+averagereposts);
-		
-		//output 
-	}
 
-	private void savediffusionresults() {
-		// TODO Auto-generated method stub
-		
+		// calculate the maximum repost number of a single original
+		ArrayList<Integer> repostsNum = new ArrayList<Integer>();
+		for (int humanorder = 0; humanorder < network.getHumans().size(); humanorder++) {
+			Human human = network.getHumans().get(humanorder);
+			for (int originalorder = 0; originalorder < human.getOriginals()
+					.size(); originalorder++) {
+				Tweet tweet = Tweet.getTweets().get(
+						human.getOriginals().get(originalorder));
+				repostsNum.add(tweet.getReposts().size());
+			}
+		}
+		repostsNum = Function.insertsort(repostsNum);
+
+		// output the average tweets and reposts per user
+		System.out.println("Average Tweets per User is: " + averagetweets);
+		System.out.println("Average Reposts per User is: " + averagereposts);
+
+		// output the largest and smallest repost number of a single original
+		System.out
+				.println("The largest repost number of a single original is: "
+						+ repostsNum.get(0));
+		System.out
+				.println("The smallest repost number of a single original is: "
+						+ repostsNum.get(repostsNum.size() - 1));
+
+		try {
+			FileOutputStream file = new FileOutputStream("results.txt");
+			DataOutputStream data = new DataOutputStream(file);
+
+			// save the average tweets and reposts per user
+			data.writeBytes("Average Tweets per User is: " + averagetweets
+					+ System.getProperty("line.separator"));
+			data.writeBytes("Average Reposts per User is: " + averagereposts
+					+ System.getProperty("line.separator"));
+
+			// save the largest and smallest repost number of originals
+			data.writeBytes("The largest repost number of a single original is: "
+					+ repostsNum.get(0)
+					+ System.getProperty("line.separator"));
+			data.writeBytes("The smallest repost number of a single original is: "
+					+ repostsNum.get(repostsNum.size() - 1)
+					+ System.getProperty("line.separator"));
+
+			
+			
+			//save the repost number of originals
+			data.writeBytes("The repost number of originals: "+System.getProperty("line.separator"));
+			for(int originalorder=0;originalorder<repostsNum.size();originalorder++){
+				data.writeBytes(repostsNum.get(originalorder)+"	");
+			}
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }

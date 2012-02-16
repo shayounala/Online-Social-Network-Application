@@ -15,6 +15,12 @@ public class Network {
 	
 	public boolean [][] matrix;
 	public double [][] weightedmatrix;
+	public static double variance_post;
+	public static double mean_post;
+	public static double mean_repost;
+	public static double variance_repost;
+	public static double mean_tweetnumber;
+	public static double variance_tweetnumber;
 	private ArrayList<Human> humans;
 	private int NodeNum;
 	
@@ -36,9 +42,9 @@ public class Network {
 		this.NodeNum = nodeNum;
 		humans = new ArrayList<Human>();
 		for(int i=0;i<nodeNum;i++){
-			int maxtweetnumber = Function.getNormalPositiveInt(Diffusion.mean_tweetnumber, Diffusion.variance_tweetnumber);
-			double thres_post = Diffusion.mean_post+Function.getNormalDouble(Diffusion.mean_post, Diffusion.variance_post);
-			double thres_repost = Diffusion.mean_repost+Function.getNormalDouble(Diffusion.mean_repost, Diffusion.variance_repost);
+			int maxtweetnumber = Function.getNormalPositiveInt(mean_tweetnumber, variance_tweetnumber);
+			double thres_post = Function.getNormalDouble(mean_post, variance_post);
+			double thres_repost = Function.getNormalDouble(mean_repost, variance_repost);
 			humans.add(new Human(i, maxtweetnumber, thres_post, thres_repost));
 		}
 	}
@@ -53,6 +59,7 @@ public class Network {
 			DB db = mongo.getDB("db");
 			DBCollection anonymouscollection = db.getCollection("AnonymousUserInformation");	
 			ArrayList<ArrayList> followerkeys = getFollowerkeys(anonymouscollection, "Followers IDs");
+
 			
 			InitiationHumans(followerkeys.size());
 			for(int i=0;i<followerkeys.size();i++){

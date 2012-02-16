@@ -24,7 +24,7 @@ public class Function {
 		return toptweetmainkeys;
 	}
 
-	public static void insertsort(ArrayList<Integer> toptweetmainkeys) {
+	public static ArrayList<Integer> insertsort(ArrayList<Integer> toptweetmainkeys) {
 		// TODO Auto-generated method stub
 		for(int index=1;index<toptweetmainkeys.size();index++){  
             int Comparablekey = toptweetmainkeys.get(index);  
@@ -37,7 +37,8 @@ public class Function {
             toptweetmainkeys.set(position, Comparablekey);  
         }
 		
-		System.out.println(toptweetmainkeys);
+		return toptweetmainkeys;
+		//System.out.println(toptweetmainkeys);
 	}
 
 	public static void limitedinsert(ArrayList<Integer> toptweetmainkeys,
@@ -63,7 +64,7 @@ public class Function {
 		}
 		toptweetmainkeys.remove(toptweetmainkeys.size()-1);
 		
-		System.out.println(toptweetmainkeys);
+		//System.out.println(toptweetmainkeys);
 	}
 
 	public static double getNormalDouble(double mean, double variance) {
@@ -77,7 +78,7 @@ public class Function {
 	public static int getNormalPositiveInt(double mean, double variance) {
 		// TODO Auto-generated method stub
 		double randomdouble = getNormalDouble(mean, variance);
-		int randomint = (int)Math.abs(randomdouble);
+		int randomint = (int)Math.abs(randomdouble)+1;
 		return randomint;
 	}
 

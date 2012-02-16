@@ -45,6 +45,11 @@ public class Tweet {
 
 	private int inreplytouserid;
 	private ArrayList<Integer> reposts;
+	public ArrayList<Integer> getReposts() {
+		return reposts;
+	}
+
+	private int original;
 
 	public int getUserid() {
 		return userid;
@@ -55,7 +60,10 @@ public class Tweet {
 		this.userid = mainkey;
 		this.createdtime = posttime;
 		this.mainkey = Number;
+		this.original = -1;
 		reposts =  new ArrayList<Integer>();
+		tweets.add(this);
+		
 		Number++;
 	}
 
@@ -65,11 +73,23 @@ public class Tweet {
 		this.isretweet = true;
 		this.createdtime = reposttime;
 		this.mainkey = Number;
+		tweets.add(this);
+		
 		Number++;
 		
 		this.inreplytouserid = tweets.get(mainkey2).userid;
 		this.inreplytomainkey = mainkey2;
+		this.original = tweets.get(mainkey2).original;
 		tweets.get(mainkey2).reposts.add(mainkey);
+	}
+
+	public static boolean isSameOrginal(int tweetmainkey, int tweetmainkey2) {
+		// TODO Auto-generated method stub
+		if(tweets.get(tweetmainkey).original == tweets.get(tweetmainkey2).original){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }
