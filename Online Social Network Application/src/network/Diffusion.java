@@ -48,15 +48,19 @@ public class Diffusion {
 	private void outputdiffusionresults() {
 		// TODO Auto-generated method stub
 		// calculate the average tweets and reposts per user.
-		double averagetweets = 0, averagereposts = 0;
+		double averagetweets = 0, averagereposts = 0, averageoriginals = 0, averagewaiting = 0;
 		for (int humanorder = 0; humanorder < network.getNodeNum(); humanorder++) {
 			averagetweets += network.getHumans().get(humanorder).getTweets()
 					.size();
 			averagereposts += network.getHumans().get(humanorder).getReposts()
 					.size();
+			averageoriginals += network.getHumans().get(humanorder).getOriginals().size();
+			averagewaiting += network.getHumans().get(humanorder).getWaitingtweets().size();
 		}
 		averagetweets /= network.getNodeNum();
 		averagereposts /= network.getNodeNum();
+		averageoriginals /= network.getNodeNum();
+		averagewaiting /= network.getNodeNum();
 
 		// calculate the maximum repost number of a single original
 		ArrayList<Integer> repostsNum = new ArrayList<Integer>();
@@ -74,6 +78,8 @@ public class Diffusion {
 		// output the average tweets and reposts per user
 		System.out.println("Average Tweets per User is: " + averagetweets);
 		System.out.println("Average Reposts per User is: " + averagereposts);
+		System.out.println("Average Originals per User is: " + averageoriginals);
+		System.out.println("Average WaitingTweets per User is: " + averagewaiting);
 
 		// output the largest and smallest repost number of a single original
 		System.out
@@ -91,6 +97,10 @@ public class Diffusion {
 			data.writeBytes("Average Tweets per User is: " + averagetweets
 					+ System.getProperty("line.separator"));
 			data.writeBytes("Average Reposts per User is: " + averagereposts
+					+ System.getProperty("line.separator"));
+			data.writeBytes("Average Originals per User is: " + averageoriginals
+					+ System.getProperty("line.separator"));
+			data.writeBytes("Average WaitingTweets per User is: " + averagewaiting
 					+ System.getProperty("line.separator"));
 
 			// save the largest and smallest repost number of originals

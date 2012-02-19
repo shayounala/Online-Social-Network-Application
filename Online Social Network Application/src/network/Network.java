@@ -21,6 +21,10 @@ public class Network {
 	public static double variance_repost;
 	public static double mean_tweetnumber;
 	public static double variance_tweetnumber;
+	public static double mean_checkfrequency;
+	public static double variance_checkfrequency;
+	public static double mean_processtime;
+	public static double variance_processtime;
 	private ArrayList<Human> humans;
 	private int NodeNum;
 	
@@ -45,7 +49,9 @@ public class Network {
 			int maxtweetnumber = Function.getNormalPositiveInt(mean_tweetnumber, variance_tweetnumber);
 			double thres_post = Function.getNormalDouble(mean_post, variance_post);
 			double thres_repost = Function.getNormalDouble(mean_repost, variance_repost);
-			humans.add(new Human(i, maxtweetnumber, thres_post, thres_repost));
+			int checkfrequency = 1;//Function.getNormalPositiveInt(mean_checkfrequency, variance_checkfrequency);
+			int processtime = 1;//Function.getNormalPositiveInt(mean_processtime, variance_processtime);
+			humans.add(new Human(i, maxtweetnumber, thres_post, thres_repost, checkfrequency, processtime));
 		}
 	}
 

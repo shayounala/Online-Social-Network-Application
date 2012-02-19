@@ -82,4 +82,20 @@ public class Function {
 		return randomint;
 	}
 
+	public static ArrayList<Double> insertsortDouble(ArrayList<Double> input) {
+		// TODO Auto-generated method stub
+		for(int index=1;index<input.size();index++){  
+            double Comparablekey = input.get(index);  
+            int position = index;  
+            //shift larger values to the right  
+            while(position>0 && input.get(position-1)<Comparablekey){  
+            	input.set(position, input.get(position-1));  
+                position--;  
+            }  
+            input.set(position, Comparablekey);  
+        }
+		
+		return input;
+	}
+
 }

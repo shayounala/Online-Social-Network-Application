@@ -35,6 +35,10 @@ public class Human {
 	private double thres_repost;
 	private int checktime;
 	private ArrayList<Integer> waitingtweets;
+	public ArrayList<Integer> getWaitingtweets() {
+		return waitingtweets;
+	}
+
 	private ArrayList<Integer> waitingtimes;
 	private int checkfrequency;
 	private Integer processtime;
@@ -83,10 +87,30 @@ public class Human {
 		tweets = new ArrayList<Integer>();
 		originals = new ArrayList<Integer>();
 		reposts = new ArrayList<Integer>();
+		waitingtweets = new ArrayList<Integer>();
+		waitingtimes = new ArrayList<Integer>();
 		this.Maxtweetnumber = maxtweetnumber;
 		this.thres_post = thres_post;
 		this.thres_repost = thres_repost;
 		//System.out.println("Mainkey of Human: "+mainkey+" maxtweetnumber: "+maxtweetnumber+" thres_post: "+thres_post+" thres_repost: "+thres_repost);
+	}
+
+	public Human(int mainkey2, int maxtweetnumber2, double thres_post2,
+			double thres_repost2, int checkfrequency2, int processtime2) {
+		// TODO Auto-generated constructor stub
+		this.mainkey = mainkey2;
+		followerkeys = new ArrayList<Integer>();
+		friendkeys = new ArrayList<Integer>();
+		tweets = new ArrayList<Integer>();
+		originals = new ArrayList<Integer>();
+		reposts = new ArrayList<Integer>();
+		waitingtweets = new ArrayList<Integer>();
+		waitingtimes = new ArrayList<Integer>();
+		this.Maxtweetnumber = maxtweetnumber2;
+		this.thres_post = thres_post2;
+		this.thres_repost = thres_repost2;
+		this.checkfrequency = checkfrequency2;
+		this.processtime = processtime2;
 	}
 
 	public void post(int posttime) {
@@ -205,7 +229,8 @@ public class Human {
 		// TODO Auto-generated method stub
 		double imitation = getimitation(tweetmainkey);
 		double random = Function.getNormalDouble(Network.mean_repost, Network.variance_repost);
-		if(imitation+random>thres_repost){
+		double randoms = (imitation+random)/2;
+		if(random>thres_repost){
 			return true;
 		}else{
 			return false;
@@ -234,7 +259,7 @@ public class Human {
 		
 		other = other/waitingtweets.size();
 		
-		imitation = (other-self+1)/4;
+		imitation = (other-self+1)/2;
 		return imitation;
 	}
 

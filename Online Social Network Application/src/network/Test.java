@@ -11,8 +11,21 @@ public class Test {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		testlimitedinsert();
-		testinsertsort();
+		//testlimitedinsert();
+		//testinsertsort();
+		testdistribution();
+	}
+
+	private static void testdistribution() {
+		// TODO Auto-generated method stub
+		ArrayList<Double> results = new ArrayList<Double>();
+		for(int i=0;i<100;i++){
+			results.add(Function.getNormalDouble(10, 1));
+		}
+		
+		System.out.println("ArrayList: "+results);
+		
+		System.out.println("Results: "+Function.insertsortDouble(results));
 	}
 
 	private static void testinsertsort() {

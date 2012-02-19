@@ -16,6 +16,10 @@ public class Network_Main {
 			Network.variance_post = 1;
 			Network.mean_repost = 10;
 			Network.variance_repost = 1;
+			Network.mean_checkfrequency = 5;
+			Network.variance_checkfrequency = 1;
+			Network.mean_processtime = 5;
+			Network.variance_processtime = 1;
 		}
 		Network network = new Network();
 		Network_Analysis analysis = new Network_Analysis();

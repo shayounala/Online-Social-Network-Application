@@ -50,6 +50,7 @@ public class Tweet {
 	}
 
 	private int original;
+	private int depth;
 
 	public int getUserid() {
 		return userid;
@@ -63,6 +64,7 @@ public class Tweet {
 		this.original = -1;
 		reposts =  new ArrayList<Integer>();
 		tweets.add(this);
+		this.depth = 1;
 		
 		Number++;
 	}
@@ -73,13 +75,15 @@ public class Tweet {
 		this.isretweet = true;
 		this.createdtime = reposttime;
 		this.mainkey = Number;
+		this.original = tweets.get(mainkey2).original;
+		reposts = new ArrayList<Integer>();
 		tweets.add(this);
 		
 		Number++;
 		
 		this.inreplytouserid = tweets.get(mainkey2).userid;
 		this.inreplytomainkey = mainkey2;
-		this.original = tweets.get(mainkey2).original;
+		this.depth = tweets.get(mainkey2).depth+1;
 		tweets.get(mainkey2).reposts.add(mainkey);
 	}
 
