@@ -47,8 +47,8 @@ public class Network {
 		humans = new ArrayList<Human>();
 		for(int i=0;i<nodeNum;i++){
 			int maxtweetnumber = Function.getNormalPositiveInt(mean_tweetnumber, variance_tweetnumber);
-			double thres_post = Function.getNormalDouble(mean_post, variance_post);
-			double thres_repost = Function.getNormalDouble(mean_repost, variance_repost);
+			double thres_post = 12.5;//Function.getNormalDouble(mean_post, variance_post);
+			double thres_repost = 12.5;//Function.getNormalDouble(mean_repost, variance_repost);
 			int checkfrequency = 1;//Function.getNormalPositiveInt(mean_checkfrequency, variance_checkfrequency);
 			int processtime = 1;//Function.getNormalPositiveInt(mean_processtime, variance_processtime);
 			humans.add(new Human(i, maxtweetnumber, thres_post, thres_repost, checkfrequency, processtime));
@@ -74,6 +74,8 @@ public class Network {
 					int follower = followerkey.get(j);
 					humans.get(i).getFollowerkeys().add(follower);
 					humans.get(follower).getFriendkeys().add(i);
+					humans.get(follower).getFriendreception().add(humans.get(follower).getCheckfrequency());
+					humans.get(follower).getDiversityreception().add(0);
 				}
 			}
 			

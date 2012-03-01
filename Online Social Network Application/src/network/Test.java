@@ -19,11 +19,11 @@ public class Test {
 	private static void testdistribution() {
 		// TODO Auto-generated method stub
 		ArrayList<Double> results = new ArrayList<Double>();
-		for(int i=0;i<100;i++){
+		for(int i=0;i<10000;i++){
 			results.add(Function.getNormalDouble(10, 1));
 		}
 		
-		System.out.println("ArrayList: "+results);
+		//System.out.println("ArrayList: "+results);
 		
 		System.out.println("Results: "+Function.insertsortDouble(results));
 	}

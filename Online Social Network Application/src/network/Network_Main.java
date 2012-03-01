@@ -10,8 +10,8 @@ public class Network_Main {
 
 		//Set up the parameters of Network
 		{
-			Network.mean_tweetnumber = 10;
-			Network.variance_tweetnumber = 1;
+			Network.mean_tweetnumber = 1;
+			Network.variance_tweetnumber = 0;
 			Network.mean_post = 10;
 			Network.variance_post = 1;
 			Network.mean_repost = 10;
@@ -35,7 +35,7 @@ public class Network_Main {
 		Diffusion diffusion = new Diffusion(network);
 		//Set up the parameters of diffusion
 		{
-			Diffusion.diffusiontime = 10;
+			Diffusion.diffusiontime = 100;
 		}
 		
 		diffusion.diffusionprocess();

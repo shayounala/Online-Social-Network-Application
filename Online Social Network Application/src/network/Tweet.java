@@ -51,6 +51,15 @@ public class Tweet {
 
 	private int original;
 	private int depth;
+	private ArrayList<Integer> width;
+
+	public ArrayList<Integer> getWidth() {
+		return width;
+	}
+
+	public int getDepth() {
+		return depth;
+	}
 
 	public int getUserid() {
 		return userid;
@@ -61,11 +70,12 @@ public class Tweet {
 		this.userid = mainkey;
 		this.createdtime = posttime;
 		this.mainkey = Number;
-		this.original = -1;
+		this.original = this.mainkey;
 		reposts =  new ArrayList<Integer>();
+		width = new ArrayList<Integer>();
 		tweets.add(this);
 		this.depth = 1;
-		
+		this.width.add(1);
 		Number++;
 	}
 
@@ -85,6 +95,12 @@ public class Tweet {
 		this.inreplytomainkey = mainkey2;
 		this.depth = tweets.get(mainkey2).depth+1;
 		tweets.get(mainkey2).reposts.add(mainkey);
+		if(tweets.get(original).width.size()<depth){
+			tweets.get(original).width.add(1);
+		}else{
+			int temp = tweets.get(original).width.get(depth-1);
+			tweets.get(original).width.set(depth-1, temp+1);
+		}
 	}
 
 	public static boolean isSameOrginal(int tweetmainkey, int tweetmainkey2) {

@@ -33,7 +33,6 @@ public class Human {
 	private int Maxtweetnumber;
 	private double thres_post;
 	private double thres_repost;
-	private int checktime;
 	private ArrayList<Integer> waitingtweets;
 	public ArrayList<Integer> getWaitingtweets() {
 		return waitingtweets;
@@ -41,7 +40,23 @@ public class Human {
 
 	private ArrayList<Integer> waitingtimes;
 	private int checkfrequency;
+	public int getCheckfrequency() {
+		return checkfrequency;
+	}
+
 	private Integer processtime;
+	private ArrayList<Integer> friendreception;
+	private ArrayList<Integer> diversityreception;
+	private double averagerepostrate;
+	private ArrayList<Double> repostrates;
+
+	public ArrayList<Integer> getDiversityreception() {
+		return diversityreception;
+	}
+
+	public ArrayList<Integer> getFriendreception() {
+		return friendreception;
+	}
 
 	public Integer getProcesstime() {
 		return processtime;
@@ -84,6 +99,9 @@ public class Human {
 		this.mainkey = mainkey;
 		followerkeys = new ArrayList<Integer>();
 		friendkeys = new ArrayList<Integer>();
+		friendreception = new ArrayList<Integer>();
+		repostrates = new ArrayList<Double>();
+		averagerepostrate = 0;
 		tweets = new ArrayList<Integer>();
 		originals = new ArrayList<Integer>();
 		reposts = new ArrayList<Integer>();
@@ -101,6 +119,10 @@ public class Human {
 		this.mainkey = mainkey2;
 		followerkeys = new ArrayList<Integer>();
 		friendkeys = new ArrayList<Integer>();
+		friendreception = new ArrayList<Integer>();
+		diversityreception = new ArrayList<Integer>();
+		repostrates = new ArrayList<Double>();
+		averagerepostrate = 0;
 		tweets = new ArrayList<Integer>();
 		originals = new ArrayList<Integer>();
 		reposts = new ArrayList<Integer>();
@@ -134,35 +156,41 @@ public class Human {
 
 	public void repost(Network network, int reposttime) {
 		// TODO Auto-generated method stub
-		if(checktime == 0){
-			ArrayList<Integer> tweetmainkeys = accesslimitedtweets(network, Maxtweetnumber);
+		ArrayList<Integer> tweetmainkeys = accesslimitedtweets(network, Maxtweetnumber);
 			
-			for(int tweetorder=0;tweetorder<tweetmainkeys.size();tweetorder++){
-				int tweetmainkey = tweetmainkeys.get(tweetorder);
+		for(int tweetorder=0;tweetorder<tweetmainkeys.size();tweetorder++){
+			int tweetmainkey = tweetmainkeys.get(tweetorder);
+				waitingtweets.add(tweetmainkey);
+				waitingtimes.add(getProcesstime());
+		}
+			
+		dealwithwaitingtweets(reposttime);
+			
+	}
+
+	private void dealwithwaitingtweets(int reposttime) {
+		// TODO Auto-generated method stub
+		for(int tweetorder=0;tweetorder<waitingtweets.size();tweetorder++){
+			int tweetmainkey = waitingtweets.get(tweetorder);
+			int waitingtime = waitingtimes.get(tweetorder);
+			if(waitingtime == 0){
 				if(istorepost(tweetmainkey)){
-					waitingtweets.add(tweetmainkey);
-					waitingtimes.add(getProcesstime());
-				}
-			}
-			
-			checktime = checkfrequency;
-		}else{
-			checktime--;
-			for(int tweetorder=0;tweetorder<waitingtweets.size();tweetorder++){
-				int waitingtime = waitingtimes.get(tweetorder);
-				if(waitingtime == 0){
 					Tweet tweet = new Tweet(this.mainkey, reposttime, waitingtweets.get(tweetorder));
 					tweets.add(tweet.getMainkey());
 					reposts.add(tweet.getMainkey());
-					
-					waitingtimes.remove(tweetorder);
-					waitingtweets.remove(tweetorder);
-				}else{
-					waitingtime--;
-					waitingtimes.set(tweetorder, waitingtime);
+					int friendorder = friendkeys.indexOf(tweet.getInreplytouserid());
+					double repostrate = repostrates.get(friendorder)*0.9+(1-0.9);
+					averagerepostrate = averagerepostrate+(repostrate-repostrates.get(friendorder))/repostrates.size();
+					repostrates.set(friendorder, repostrate);
 				}
 				
+				waitingtimes.remove(tweetorder);
+				waitingtweets.remove(tweetorder);
+			}else{
+				waitingtime--;
+				waitingtimes.set(tweetorder, waitingtime);
 			}
+			
 		}
 	}
 
@@ -173,6 +201,13 @@ public class Human {
 		
 		//access tweets from every neighbor with maximum number
 		for(int neighbororder=0;neighbororder<friendkeys.size();neighbororder++){
+			int receptiontime = friendreception.get(neighbororder);
+			if(receptiontime != 0){
+				friendreception.set(neighbororder, receptiontime-1);
+				continue;
+			}else{
+				getfriendreception(neighbororder);
+			}
 			Human human = network.getHumans().get(friendkeys.get(neighbororder));
 			int tweetsize = human.tweets.size();
 			ArrayList<Integer> friendtweets = new ArrayList<Integer>();
@@ -185,7 +220,7 @@ public class Human {
 			
 			if(tweetmainkeys.size()<maxtweetnumber){
 				tweetmainkeys.addAll(friendtweets);
-				tweetmainkeys = Function.selectTops(tweetmainkeys, maxtweetnumber);
+				tweetmainkeys = Function.insertsort(tweetmainkeys);
 			}else{
 				tweetloop:for(int friendtweetorder = 0;friendtweetorder<friendtweets.size();friendtweetorder++){
 					if(friendtweets.get(friendtweetorder)<tweetmainkeys.get(maxtweetnumber-1)){
@@ -199,6 +234,13 @@ public class Human {
 		}
 		
 		return tweetmainkeys;
+	}
+
+	private void getfriendreception(int neighbororder) {
+		// TODO Auto-generated method stub
+		int receptiontime = diversityreception.get(neighbororder)+(int)(repostrates.get(neighbororder)-averagerepostrate);
+		diversityreception.set(neighbororder, receptiontime);
+		friendreception.set(neighbororder, diversityreception.get(neighbororder)+checkfrequency);
 	}
 
 	@SuppressWarnings("unused")
@@ -227,6 +269,11 @@ public class Human {
 
 	private boolean istorepost(int tweetmainkey) {
 		// TODO Auto-generated method stub
+		for(int tweetorder=0;tweetorder<tweets.size();tweetorder++){
+			if(!Tweet.isSameOrginal(tweetmainkey, tweets.get(tweetorder))){
+				return false;
+			}
+		}
 		double imitation = getimitation(tweetmainkey);
 		double random = Function.getNormalDouble(Network.mean_repost, Network.variance_repost);
 		double randoms = (imitation+random)/2;

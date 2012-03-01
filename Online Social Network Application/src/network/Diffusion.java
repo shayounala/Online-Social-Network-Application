@@ -64,16 +64,42 @@ public class Diffusion {
 
 		// calculate the maximum repost number of a single original
 		ArrayList<Integer> repostsNum = new ArrayList<Integer>();
-		for (int humanorder = 0; humanorder < network.getHumans().size(); humanorder++) {
+		
+		//calculate the average depth and width of information diffusion
+		ArrayList<Integer> diffusionDepth = new ArrayList<Integer>();
+		ArrayList<Integer> diffusionWidth = new ArrayList<Integer>();
+		double averageWidth = 0;
+		double averageDepth = 0;
+
+		for(int humanorder = 0; humanorder<network.getHumans().size();humanorder++){
 			Human human = network.getHumans().get(humanorder);
-			for (int originalorder = 0; originalorder < human.getOriginals()
-					.size(); originalorder++) {
-				Tweet tweet = Tweet.getTweets().get(
-						human.getOriginals().get(originalorder));
-				repostsNum.add(tweet.getReposts().size());
+			for(int originalorder=0;originalorder<human.getOriginals().size();originalorder++){
+				Tweet tweet = Tweet.getTweets().get(human.getOriginals().get(originalorder));
+				
+				int repostnumber = 0;
+				for(int widthorder=0;widthorder<tweet.getWidth().size();widthorder++){
+					repostnumber += tweet.getWidth().get(widthorder);
+				}
+				repostsNum.add(repostnumber);
+				
+				if(repostnumber>100){
+					diffusionDepth.add(tweet.getWidth().size());
+					averageDepth += tweet.getWidth().size();
+					
+					int tweetWidth = Function.selectTops(tweet.getWidth(), 1).get(0);
+					diffusionWidth.add(tweetWidth);
+					averageWidth += tweetWidth;
+				}
+				
 			}
 		}
+		averageDepth /= diffusionDepth.size();
+		averageWidth /= diffusionWidth.size();
+		
 		repostsNum = Function.insertsort(repostsNum);
+		//diffusionDepth = Function.insertsort(diffusionDepth);
+		//diffusionWidth = Function.insertsort(diffusionWidth);
+		
 
 		// output the average tweets and reposts per user
 		System.out.println("Average Tweets per User is: " + averagetweets);
@@ -88,9 +114,14 @@ public class Diffusion {
 		System.out
 				.println("The smallest repost number of a single original is: "
 						+ repostsNum.get(repostsNum.size() - 1));
+		
+		//output the average depth and width of information diffusion
+		System.out.println("Average depth of information diffusion is: " + averageDepth);
+		System.out.println("Average width of information diffuison is: " + averageWidth);
+
 
 		try {
-			FileOutputStream file = new FileOutputStream("results.txt");
+			FileOutputStream file = new FileOutputStream("results.txt", true);
 			DataOutputStream data = new DataOutputStream(file);
 
 			// save the average tweets and reposts per user
@@ -114,10 +145,25 @@ public class Diffusion {
 			
 			
 			//save the repost number of originals
-			data.writeBytes("The repost number of originals: "+System.getProperty("line.separator"));
+			/*data.writeBytes("The repost number of originals: "+System.getProperty("line.separator"));
 			for(int originalorder=0;originalorder<repostsNum.size();originalorder++){
 				data.writeBytes(repostsNum.get(originalorder)+"	");
 			}
+			data.writeBytes(System.getProperty("line.separator"));*/
+			
+			//save the average depth and width of information diffusion
+			data.writeBytes("Average width of information diffuison is: " + averageWidth+System.getProperty("line.separator"));
+			data.writeBytes("Average depth of information diffuison is: " + averageDepth+System.getProperty("line.separator"));
+			
+			//save the depth and width of information diffusion
+			data.writeBytes("The depth of information diffusion: "+System.getProperty("line.separator"));
+			for(int originalorder=0;originalorder<diffusionDepth.size();originalorder++){
+				data.writeBytes(diffusionDepth.get(originalorder)+"	");
+				data.writeBytes(diffusionWidth.get(originalorder)+System.getProperty("line.separator"));
+			}
+			data.writeBytes(System.getProperty("line.separator"));
+			
+
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
